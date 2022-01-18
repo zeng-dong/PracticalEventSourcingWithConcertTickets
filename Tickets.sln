@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tickets", "Tickets\Tickets.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{FA1A0A4B-3E1F-42A6-A390-6041B96FC780}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tickets.Api", "Tickets.Api\Tickets.Api.csproj", "{B2A48A64-734A-4E80-8AA3-B3F4A7D7D22E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FA1A0A4B-3E1F-42A6-A390-6041B96FC780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA1A0A4B-3E1F-42A6-A390-6041B96FC780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA1A0A4B-3E1F-42A6-A390-6041B96FC780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2A48A64-734A-4E80-8AA3-B3F4A7D7D22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A48A64-734A-4E80-8AA3-B3F4A7D7D22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A48A64-734A-4E80-8AA3-B3F4A7D7D22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A48A64-734A-4E80-8AA3-B3F4A7D7D22E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
