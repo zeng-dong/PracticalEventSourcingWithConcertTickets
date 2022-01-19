@@ -1,6 +1,6 @@
 ﻿using Core;
+using Core.Serialization.Newtonsoft;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
 
 namespace Tickets.Api;
 
@@ -15,8 +15,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        //services.AddMvc()
-        //  .AddNewtonsoftJson(opt => opt.SerializerSettings.WithDefaults());
+        services.AddMvc()
+          .AddNewtonsoftJson(opt => opt.SerializerSettings.WithDefaults());
 
         services.AddSwaggerGen(c =>
         {
