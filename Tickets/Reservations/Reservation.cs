@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Aggregates;
+using Tickets.Reservations.ChangingReservationSeat;
 using Tickets.Reservations.CreatingTentativeReservation;
 using Tickets.Reservations.NumberGeneration;
 
@@ -41,6 +42,20 @@ public class Reservation : Aggregate
         Apply(@event);
     }
 
+    public void ChangeSeat(Guid newSeatId)
+    {
+        if (newSeatId == Guid.Empty)
+            throw new ArgumentOutOfRangeException(nameof(newSeatId));
+
+        if (Status != ReservationStatus.Tentative)
+            throw new InvalidOperationException($"Changing seat for the reservation in '{Status}' status is not allowed.");
+
+        var @event = ReservationSeatChanged.Create(Id, newSeatId);
+
+        Enqueue(@event);
+        Apply(@event);
+    }
+
     public static Reservation CreateTentative(
         Guid id,
         IReservationNumberGenerator numberGenerator,
@@ -55,6 +70,12 @@ public class Reservation : Aggregate
         SeatId = @event.SeatId;
         Number = @event.Number;
         Status = ReservationStatus.Tentative;
+        Version++;
+    }
+
+    public void Apply(ReservationSeatChanged @event)
+    {
+        SeatId = @event.SeatId;
         Version++;
     }
 }
