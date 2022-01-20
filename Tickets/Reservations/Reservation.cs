@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Aggregates;
 using Tickets.Reservations.ChangingReservationSeat;
+using Tickets.Reservations.ConfirmingReservation;
 using Tickets.Reservations.CreatingTentativeReservation;
 using Tickets.Reservations.NumberGeneration;
 
@@ -56,6 +57,17 @@ public class Reservation : Aggregate
         Apply(@event);
     }
 
+    public void Confirm()
+    {
+        if (Status != ReservationStatus.Tentative)
+            throw new InvalidOperationException($"Only tentative reservation can be confirmed (current status: {Status}.");
+
+        var @event = ReservationConfirmed.Create(Id);
+
+        Enqueue(@event);
+        Apply(@event);
+    }
+
     public static Reservation CreateTentative(
         Guid id,
         IReservationNumberGenerator numberGenerator,
@@ -76,6 +88,12 @@ public class Reservation : Aggregate
     public void Apply(ReservationSeatChanged @event)
     {
         SeatId = @event.SeatId;
+        Version++;
+    }
+
+    public void Apply(ReservationConfirmed @event)
+    {
+        Status = ReservationStatus.Confirmed;
         Version++;
     }
 }
