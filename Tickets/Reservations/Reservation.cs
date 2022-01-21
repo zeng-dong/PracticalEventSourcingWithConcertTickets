@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Aggregates;
+﻿using Core.Aggregates;
+using Tickets.Reservations.CancellingReservation;
 using Tickets.Reservations.ChangingReservationSeat;
 using Tickets.Reservations.ConfirmingReservation;
 using Tickets.Reservations.CreatingTentativeReservation;
@@ -13,7 +9,7 @@ namespace Tickets.Reservations;
 
 public class Reservation : Aggregate
 {
-    private IReservationNumberGenerator numberGenerator;
+    private readonly IReservationNumberGenerator numberGenerator;
 
     public Guid SeatId { get; private set; }
 
@@ -68,6 +64,17 @@ public class Reservation : Aggregate
         Apply(@event);
     }
 
+    public void Cancel()
+    {
+        if (Status != ReservationStatus.Tentative)
+            throw new InvalidOperationException($"Only tentative reservation can be cancelled (current status: {Status}).");
+
+        var @event = ReservationCancelled.Create(Id);
+
+        Enqueue(@event);
+        Apply(@event);
+    }
+
     public static Reservation CreateTentative(
         Guid id,
         IReservationNumberGenerator numberGenerator,
@@ -94,6 +101,12 @@ public class Reservation : Aggregate
     public void Apply(ReservationConfirmed @event)
     {
         Status = ReservationStatus.Confirmed;
+        Version++;
+    }
+
+    public void Apply(ReservationCancelled @event)
+    {
+        Status = ReservationStatus.Cancelled;
         Version++;
     }
 }
