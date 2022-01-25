@@ -1,6 +1,9 @@
 ﻿using Core;
+using Core.Exceptions;
 using Core.Serialization.Newtonsoft;
+using Core.WebApi.ExceptionHandling;
 using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace Tickets.Api;
 
@@ -34,11 +37,11 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        //app.UseExceptionHandlingMiddleware(exception => exception switch
-        //{
-        //    AggregateNotFoundException _ => HttpStatusCode.NotFound,
-        //    _ => HttpStatusCode.InternalServerError
-        //});
+        app.UseExceptionHandlingMiddleware(exception => exception switch
+        {
+            AggregateNotFoundException _ => HttpStatusCode.NotFound,
+            _ => HttpStatusCode.InternalServerError
+        });
 
         app.UseRouting();
 
