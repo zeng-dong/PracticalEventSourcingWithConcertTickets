@@ -52,7 +52,7 @@ public class ReservationDetailsProjection : AggregateProjection<ReservationDetai
     {
         ProjectEvent<TentativeReservationCreated>((item, @event) => item.Apply(@event));
 
-        ProjectEvent<ReservationSeatChanged>((item, @event) => item.Apply(@event)); KE
+        ProjectEvent<ReservationSeatChanged>((item, @event) => item.Apply(@event));
 
         ProjectEvent<ReservationConfirmed>((item, @event) => item.Apply(@event));
 
