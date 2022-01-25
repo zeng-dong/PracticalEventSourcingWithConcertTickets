@@ -24,6 +24,37 @@ public class Startup
         });
 
         services.AddCoreService();
-        //services.AddTicketsModule(config);
+        services.AddTicketsModule(config);
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        //app.UseExceptionHandlingMiddleware(exception => exception switch
+        //{
+        //    AggregateNotFoundException _ => HttpStatusCode.NotFound,
+        //    _ => HttpStatusCode.InternalServerError
+        //});
+
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
+        app.UseSwagger();
+
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tickets V1");
+            c.RoutePrefix = string.Empty;
+        });
     }
 }
