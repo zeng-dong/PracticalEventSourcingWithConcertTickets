@@ -1,9 +1,9 @@
 ﻿using Core.Commands;
 using Marten;
 using MediatR;
-using Tickets.Maintainance.Commands;
+using Tickets.Maintenance.Commands;
 
-namespace Tickets.Maintainance;
+namespace Tickets.Maintenance;
 
 public class MaintenanceCommandHandler : ICommandHandler<RebuildProjection>
 {

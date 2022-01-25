@@ -1,6 +1,6 @@
 ﻿using Core.Commands;
 
-namespace Tickets.Maintainance.Commands;
+namespace Tickets.Maintenance.Commands;
 
 public class RebuildProjection : ICommand
 {

@@ -1,8 +1,8 @@
 ﻿using Core.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Tickets.Maintainance.Commands;
+using Tickets.Maintenance.Commands;
 
-namespace Tickets.Maintainance;
+namespace Tickets.Maintenance;
 
 internal static class Config
 {
