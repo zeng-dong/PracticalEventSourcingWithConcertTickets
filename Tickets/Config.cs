@@ -1,7 +1,7 @@
 ﻿using Core.Marten;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tickets.Maintainance;
+using Tickets.Maintenance;
 using Tickets.Reservations;
 
 namespace Tickets;
