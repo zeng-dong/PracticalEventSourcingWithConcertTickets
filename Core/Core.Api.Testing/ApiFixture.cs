@@ -7,6 +7,12 @@ using Xunit;
 
 namespace Core.Api.Testing;
 
+public abstract class ApiFixture<TStartup> : ApiFixture where TStartup : class
+{
+    public override TestContext CreateTestContext() =>
+        new TestContext<TStartup>(GetConfiguration, SetupServices, SetupWebHostBuilder);
+}
+
 public abstract class ApiFixture : IAsyncLifetime
 {
     protected readonly TestContext Sut;
