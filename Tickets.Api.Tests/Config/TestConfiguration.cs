@@ -9,7 +9,7 @@ public static class TestConfiguration
         {
             {
                 "EventStore:ConnectionString",
-                "PORT = 5432; HOST = localhost; TIMEOUT = 15; POOLING = True; MINPOOLSIZE = 1; MAXPOOLSIZE = 100; COMMANDTIMEOUT = 20; DATABASE = 'ConcertTickets'; PASSWORD = 'tester'; USER ID = 'tester'"
+                "PORT = 5432; HOST = localhost; TIMEOUT = 15; POOLING = True; MINPOOLSIZE = 1; MAXPOOLSIZE = 100; COMMANDTIMEOUT = 20; DATABASE = 'ConcertTickets_Test'; PASSWORD = 'tester'; USER ID = 'tester'"
             },
             {"EventStore:WriteModelSchema", $"{fixtureName}Write"},
             {"EventStore:ReadModelSchema", $"{fixtureName}Read"},

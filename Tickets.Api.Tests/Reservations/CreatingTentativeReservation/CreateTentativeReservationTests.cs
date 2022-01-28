@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using Tickets.Api.Tests.Config;
 
 using Tickets.Api.Requests;
+using Xunit;
+using FluentAssertions;
+using System.Net;
+using Core.Api.Testing;
 
 namespace Tickets.Api.Tests.Reservations.CreatingTentativeReservation;
 
@@ -29,6 +33,25 @@ public class CreateTentativeReservationFixture : ApiWithEventsFixture<Startup>
     }
 }
 
-public class CreateTentativeReservationTests
+public class CreateTentativeReservationTests : IClassFixture<CreateTentativeReservationFixture>
 {
+    private readonly CreateTentativeReservationFixture fixture;
+
+    public CreateTentativeReservationTests(CreateTentativeReservationFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+
+    [Fact]
+    [Trait("Category", "Acceptance")]
+    public async Task CreateCommand_ShouldReturn_CreatedStatus_With_ReservationId()
+    {
+        var commandResponse = fixture.CommandResponse;
+        commandResponse.EnsureSuccessStatusCode();
+        commandResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        // get created record id
+        var createdId = await commandResponse.GetResultFromJson<Guid>();
+        createdId.Should().NotBeEmpty();
+    }
 }
