@@ -13,6 +13,8 @@ using FluentAssertions;
 using System.Net;
 using Core.Api.Testing;
 using Tickets.Reservations.CreatingTentativeReservation;
+using Tickets.Reservations.GettingReservationById;
+using Tickets.Reservations;
 
 namespace Tickets.Api.Tests.Reservations.CreatingTentativeReservation;
 
@@ -70,5 +72,24 @@ public class CreateTentativeReservationTests : IClassFixture<CreateTentativeRese
                 && @event.SeatId == fixture.SeatId
                 && !string.IsNullOrEmpty(@event.Number)
             );
+    }
+
+    [Fact]
+    [Trait("Category", "Acceptance")]
+    public async Task CreateCommand_ShouldCreate_ReservationDetailsReadModel()
+    {
+        var createdReservationId = await fixture.CommandResponse.GetResultFromJson<Guid>();
+
+        // prepare query
+        var query = $"{createdReservationId}";
+
+        //send query
+        var queryResponse = await fixture.Get(query);
+        queryResponse.EnsureSuccessStatusCode();
+
+        var reservationDetails = await queryResponse.GetResultFromJson<ReservationDetails>();
+        reservationDetails.Id.Should().Be(createdReservationId);
+        reservationDetails.Number.Should().NotBeNull().And.NotBeEmpty();
+        reservationDetails.Status.Should().Be(ReservationStatus.Tentative);
     }
 }
