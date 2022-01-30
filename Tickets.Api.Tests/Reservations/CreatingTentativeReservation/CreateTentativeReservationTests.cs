@@ -12,6 +12,7 @@ using Xunit;
 using FluentAssertions;
 using System.Net;
 using Core.Api.Testing;
+using Tickets.Reservations.CreatingTentativeReservation;
 
 namespace Tickets.Api.Tests.Reservations.CreatingTentativeReservation;
 
@@ -53,5 +54,21 @@ public class CreateTentativeReservationTests : IClassFixture<CreateTentativeRese
         // get created record id
         var createdId = await commandResponse.GetResultFromJson<Guid>();
         createdId.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    [Trait("Category", "Acceptance")]
+    public async Task CreateCommand_ShouldPublish_TentativeReservationCreated()
+    {
+        var createdReservationId = await fixture.CommandResponse.GetResultFromJson<Guid>();
+
+        fixture.PublishedInternalEventsOfType<TentativeReservationCreated>()
+            .Should()
+            .HaveCount(1)
+            .And.Contain(@event =>
+                @event.ReservationId == createdReservationId
+                && @event.SeatId == fixture.SeatId
+                && !string.IsNullOrEmpty(@event.Number)
+            );
     }
 }
