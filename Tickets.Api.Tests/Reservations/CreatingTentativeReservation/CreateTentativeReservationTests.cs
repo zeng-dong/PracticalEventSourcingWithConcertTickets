@@ -17,6 +17,7 @@ using Tickets.Reservations.GettingReservationById;
 using Tickets.Reservations;
 using Tickets.Reservations.GettingReservations;
 using Tickets.Api.Responses;
+using Tickets.Reservations.GettingReservationHistory;
 
 namespace Tickets.Api.Tests.Reservations.CreatingTentativeReservation;
 
@@ -119,5 +120,33 @@ public class CreateTentativeReservationTests : IClassFixture<CreateTentativeRese
         reservationInfo.Id.Should().Be(createdReservationId);
         reservationInfo.Number.Should().NotBeNull().And.NotBeEmpty();
         reservationInfo.Status.Should().Be(ReservationStatus.Tentative);
+    }
+
+    [Fact]
+    [Trait("Category", "Acceptance")]
+    public async Task CreateCommand_ShouldCreate_ReservationHistory()
+    {
+        var createdReservationId = await fixture.CommandResponse.GetResultFromJson<Guid>();
+
+        // prepare query
+        var query = $"{createdReservationId}/history";
+
+        //send query
+        var queryResponse = await fixture.Get(query);
+        queryResponse.EnsureSuccessStatusCode();
+
+        var reservationPagedList = await queryResponse.GetResultFromJson<PagedListResponse<ReservationHistory>>();
+
+        reservationPagedList.Should().NotBeNull();
+        reservationPagedList.Items.Should().NotBeNull();
+
+        reservationPagedList.Items.Should().HaveCount(1);
+        reservationPagedList.TotalItemCount.Should().Be(1);
+        reservationPagedList.HasNextPage.Should().Be(false);
+
+        var reservationInfo = reservationPagedList.Items.Single();
+
+        reservationInfo.ReservationId.Should().Be(createdReservationId);
+        reservationInfo.Description.Should().StartWith("Created tentative reservation with number");
     }
 }
